@@ -1,0 +1,9 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fa_icon_4.7.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/my.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.js') }}"></script>
+
+{% endblock %}

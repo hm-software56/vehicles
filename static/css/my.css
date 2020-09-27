@@ -1,0 +1,9 @@
+body{
+    background: black;
+    font-family: "Phetsarath OT" !important;
+}
+
+.scroup {
+  height:489px;
+  overflow-y: scroll;
+}
