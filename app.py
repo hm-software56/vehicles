@@ -27,9 +27,14 @@ def gen(camera, url):
     camera.video = cv2.VideoCapture(best.url)
     # camera.video = cv2.VideoCapture(webcam_id)
     while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        while True:
+            try:
+                frame = camera.get_frame()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+            except:
+                camera.__del__()
+                break
 
 
 @app.route('/video_feed', methods=['GET'])
