@@ -4,6 +4,7 @@ import cv2, pafy
 from camera import VideoCamera
 import imageio
 import os, sys
+from time import gmtime, strftime, localtime
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -13,6 +14,7 @@ webcam_id = 'cars.avi'
 
 @app.route('/', methods=['get', 'post'])
 def index():
+    session['time'] = 0;
     if request.form.get('url'):
         session['url'] = request.form.get('url')
     return render_template('index.html')
@@ -42,13 +44,13 @@ def redovideo():
     if request.args.get('name'):
         session['redo_name'] = request.args.get('name')
     # path = os.listdir(os.path.join('static', 'video'))
-    path = [file for file in os.listdir(os.path.join('static', 'video')) if file.endswith('.avi')]
+    """path = [file for file in os.listdir(os.path.join('static', 'video')) if file.endswith('.avi')]
     try:
         for filename in path:
             convertFile(os.path.join('static', 'video', filename), '.mp4')
             os.remove(os.path.join('static', 'video', filename))
     except:
-        print("Can't delete file")
+        print("Can't delete file")"""
 
     path = [file for file in os.listdir(os.path.join('static', 'video')) if file.endswith('.mp4')]
     path.sort(reverse=True)
@@ -69,6 +71,22 @@ def genredovideo(camera, redo_name):
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
+@app.route('/convert', methods=['GET'])
+def convert():
+    path = [file for file in os.listdir(os.path.join('static', 'video')) if file.endswith('.avi')]
+    path.sort(reverse=True)
+    try:
+        i = 0
+        for filename in path:
+            i = i + 1
+            convertFile(os.path.join('static', 'video', filename), '.mp4')
+            os.remove(os.path.join('static', 'video', filename))
+
+    except:
+        print("Can't delete file")
+    return 'done'
+
+
 def convertFile(inputpath, targetFormat):
     outputpath = os.path.splitext(inputpath)[0] + targetFormat
     print("converting\r\n\t{0}\r\nto\r\n\t{1}".format(inputpath, outputpath))
@@ -87,5 +105,5 @@ def convertFile(inputpath, targetFormat):
 
 
 if __name__ == '__main__':
-    app.run()
-    # app.run(host='192.168.100.247', port='2020')
+    #app.run()
+    app.run(debug=True, host='192.168.100.247', port='2020')

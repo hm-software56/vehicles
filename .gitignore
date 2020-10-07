@@ -3,3 +3,5 @@ static/video/
 __pycache__/
 .idea/
 Phetsarath_OT.ttf
+static/dataset/model.weights
+static/dataset/coco.names

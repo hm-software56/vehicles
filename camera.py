@@ -38,8 +38,8 @@ class VideoCamera(object):
         self.writer = None
         self.total = 0
         # derive the paths to the YOLO weights and model configuration
-        self.weightsPath = os.path.sep.join(['yolococo', "yolov3.weights"])
-        self.configPath = os.path.sep.join(['yolococo', "yolov3.cfg"])
+        self.weightsPath = os.path.sep.join(['static', 'dataset', "model.weights"])
+        self.configPath = os.path.sep.join(['static', 'dataset', "model.cfg"])
         # load our YOLO object detector trained on COCO dataset (80 classes)
         # and determine only the *output* layer names that we need from YOLO
         # print("[INFO] loading YOLO from disk...")
@@ -110,7 +110,7 @@ class VideoCamera(object):
         classIDs = []
 
         # loop over each of the layer outputs
-        #print(layerOutputs)
+        # print(layerOutputs)
         for output in layerOutputs:
             # loop over each of the detections
             for detection in output:
@@ -122,7 +122,7 @@ class VideoCamera(object):
                 # filter out weak predictions by ensuring the detected
                 # probability is greater than the minimum probability
                 if confidence > self.confidence:
-                    if classID in [1,2,3,5,6,7]: # [1,2,3,5,6,7] number of labels want to detecttion
+                    if classID in [1, 2, 3, 5, 6, 7]:  # [1,2,3,5,6,7] number of labels want to detecttion
 
                         # scale the bounding box coordinates back relative to
                         # the size of the image, keeping in mind that YOLO
@@ -143,12 +143,12 @@ class VideoCamera(object):
                         boxes.append([x, y, int(width), int(height)])
                         confidences.append(float(confidence))
                         classIDs.append(classID)
-                        #print(classID)
+                        # print(classID)
 
         # apply non-maxima suppression to suppress weak, overlapping
         # bounding boxes
         idxs = cv2.dnn.NMSBoxes(boxes, confidences, self.confidence, self.threshold)
-        #print("idxs", idxs)
+        # print("idxs", idxs)
         # print("boxes", boxes[i][0])
         # print("boxes", boxes[i][1])
 
@@ -223,7 +223,7 @@ class VideoCamera(object):
                         self.text_speed_to_hours = speed
                     # if self.intersect(p0, p1, self.line2[0], self.line2[1]):
                     #                counter2 += 1
-                #print(classIDs[i])
+                # print(classIDs[i])
                 # text = "{}: {:.4f}".format(LABELS[classIDs[i]], confidences[i])
                 # text = "{}".format(indexIDs[i])
                 # cv2.putText(frame, text, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
@@ -249,6 +249,7 @@ class VideoCamera(object):
 
         # saves image file
         # +cv2.imwrite("output/frame-{}.png".format(frameIndex), frame)
+
         if self.writer is None:
             # initialize our video writer
             fourcc = cv2.VideoWriter_fourcc(*"MJPG")
