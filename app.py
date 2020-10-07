@@ -66,9 +66,12 @@ def video_redo():
 def genredovideo(camera, redo_name):
     camera.video = cv2.VideoCapture(os.path.join('static', 'video', redo_name))
     while True:
-        frame = camera.get_frame_redo()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        try:
+            frame = camera.get_frame_redo()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        except:
+            camera.__del__()
 
 
 @app.route('/convert', methods=['GET'])
@@ -105,5 +108,5 @@ def convertFile(inputpath, targetFormat):
 
 
 if __name__ == '__main__':
-    #app.run()
+    # app.run()
     app.run(debug=True, host='192.168.100.247', port='2020')
